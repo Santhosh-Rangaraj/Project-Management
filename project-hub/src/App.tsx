@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import './App.css'
+import AppLayout from './components/layout/AppLayout'
 
 function App() {
   
 
   return (
   <>
-  <h1>Project-Hub</h1>
+ <AppLayout></AppLayout>
   </>
   )
 }
