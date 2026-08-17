@@ -8,7 +8,8 @@ import {
   Bell,
   Settings,
 } from "lucide-react";
-import '../../styles/Sidebar.css'
+import '../../styles/Sidebar.css';
+import { NavLink } from "react-router-dom";
 
 function Sidebar() {
   return (
@@ -22,40 +23,40 @@ function Sidebar() {
         <div className="nav-section">
           <p className="nav-section-title">WORKSPACE</p>
 
-          <button className="nav-item active">
+          <NavLink to='/' className="nav-item">
             <LayoutDashboard size={20} />
             <span>Dashboard</span>
-          </button>
+          </NavLink>
 
-          <button className="nav-item">
+          <NavLink to='/projects' className="nav-item">
             <FolderKanban size={20} />
             <span>Projects</span>
-          </button>
+          </NavLink>
 
-          <button className="nav-item">
+          <NavLink to='/tasks' className="nav-item">
             <CheckSquare size={20} />
             <span>Tasks</span>
-          </button>
+          </NavLink>
 
-          <button className="nav-item">
+          <NavLink to='/kanban' className="nav-item">
             <Columns3 size={20} />
             <span>Kanban</span>
-          </button>
+          </NavLink>
 
-          <button className="nav-item">
+          <NavLink to='/team' className="nav-item">
             <Users size={20} />
             <span>Team</span>
-          </button>
+          </NavLink>
 
-          <button className="nav-item">
+          <NavLink to='/activity' className="nav-item">
             <Activity size={20} />
             <span>Activity</span>
-          </button>
+          </NavLink>
 
-          <button className="nav-item">
+          <NavLink to='/notification' className="nav-item">
             <Bell size={20} />
             <span>Notifications</span>
-          </button>
+          </NavLink>
         </div>
 
         <div className="nav-section">
