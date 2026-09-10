@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/popover"
 import { format } from 'date-fns/format';
 import { CalendarIcon } from "lucide-react"
-
+import { Textarea } from "@/components/ui/textarea"
 
 
 
@@ -40,6 +40,13 @@ const CreateProject = () => {
         "On Hold",
         "Archived",
     ]
+    const Members=[
+      "Arjun",
+      "Sam",
+      "Santhosh",
+      "Potter",
+      "Lannister"      
+    ]
 
 const [open, setOpen] = useState(false)
 const [date, setDate] = useState<Date | undefined>(undefined)
@@ -53,7 +60,7 @@ const [date, setDate] = useState<Date | undefined>(undefined)
         </Field>
         <Field>
             <FieldLabel>Project Description</FieldLabel>
-            <Input type="text" placeholder="Enter project description" />
+            <Textarea  placeholder="Enter project description" />
         </Field>
          <FieldGroup className="grid max-w-sm grid-cols-2">
             <Field>
@@ -75,7 +82,7 @@ const [date, setDate] = useState<Date | undefined>(undefined)
             <Field>
                 <FieldLabel>Due Date</FieldLabel>
                 <Popover>
-                    <PopoverTrigger asChild>
+                    <PopoverTrigger>
                         <Button variant="outline">
                             {date ? format(date, "PPP") : <span>Select a date</span>}{" "} <CalendarIcon />
                         </Button>
@@ -90,9 +97,26 @@ const [date, setDate] = useState<Date | undefined>(undefined)
                 </Popover>  
             </Field>
          </FieldGroup>
-          <FieldGroup className="grid max-w-sm grid-cols-2">
-            <Button type="submit">Create Project</Button>
+            <Field>
+                <FieldLabel>Members</FieldLabel>
+                <Select>
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="Select a Project Members" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Status</SelectLabel>
+        {Members.map((mem) => (
+          <SelectItem value={mem}>{mem}</SelectItem>
+        ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+      </Field>
+        <FieldGroup className="grid max-w-sm grid-cols-2">
+        
             <Button type="reset" variant="secondary">Cancel</Button>
+                <Button type="submit" className="bg-blue-500 hover:bg-blue-600">Create Project</Button>
           </FieldGroup>
     </FieldGroup>
                </>

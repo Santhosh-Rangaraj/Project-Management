@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./App.css";
+// import "./App.css";
 import AppLayout from "./components/layout/AppLayout";
 import { Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";

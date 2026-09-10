@@ -7,19 +7,23 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
 
-import"../styles/Project.css";
 const Project=()=>{
     return(
         <>
-        <div className='project-header'>
+        <div className='flex justify-between items-center p-4'>
         <div className='project-header-text'>
-        <h1>Project</h1>
-        <p>Manage and track all your projects</p>
+        <h1 className='text-4xl font-bold'>Project</h1>
+        <p className='text-gray-600'>Manage and track all your projects</p>
         </div>
         <Dialog>
-          <DialogTrigger render={<button><Plus /> Add Project</button>}/>
-          <DialogContent>
+          <DialogTrigger>
+            <Button className='bg-blue-600 h-12 p-4 rounded-lg hover:bg-blue-700 hover:shadow-lg'>
+              <Plus /> Add Project
+            </Button>
+          </DialogTrigger>
+          <DialogContent >
             <CreateProject />
           </DialogContent>
         </Dialog>

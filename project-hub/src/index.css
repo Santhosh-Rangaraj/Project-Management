@@ -5,21 +5,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 
-body {
-  font-family: Arial, sans-serif;
-  background: #f8fafc;
-  color: #1f2937;
-}
-
-button {
-  font: inherit;
-}
 
 @theme inline {
   --font-heading: var(--font-sans);

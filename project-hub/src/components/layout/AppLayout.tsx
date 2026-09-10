@@ -8,9 +8,9 @@ import Project from "../../pages/Project";
 
 const AppLayout = () => {
   return (
-    <div className="app-layout">
+    <div className="flex h-screen">
       <Sidebar />
-      <main className="main-content">
+      <main className="flex flex-col flex-1">
         <TopNavbar />
         <Outlet />
       </main>
