@@ -26,14 +26,7 @@ import { format } from 'date-fns/format';
 import { CalendarIcon } from "lucide-react"
 import { Textarea } from "@/components/ui/textarea"
 
-
-
-
-
-
-const CreateProject = () => {
-
-    const Status=[
+ const Status=[
         "Planning",
         "Active",
         "Completed",
@@ -48,24 +41,42 @@ const CreateProject = () => {
       "Lannister"      
     ]
 
-const [open, setOpen] = useState(false)
-const [date, setDate] = useState<Date | undefined>(undefined)
+const CreateProject = () => {
+  const [projectData, setProjectData] = useState<{
+    name: string;
+    description: string;
+    status: string;
+    dueDate?: Date;
+    members: string[];
+  }>({
+    name: '',
+    description: '',
+    status: 'Planning',
+    dueDate: undefined,
+    members: []
+  });
+
+  const handleSubmit = (event:any) => {
+    event.preventDefault();
+    console.log('projectData', projectData);
+  }
 
     return (
        <>
+       <form onSubmit={handleSubmit}>
      <FieldGroup>
         <Field>
             <FieldLabel>Project Name</FieldLabel>
-            <Input type="text" placeholder="Enter project name" />
+            <Input value={projectData.name} onChange={(e) => setProjectData({...projectData, name: e.target.value})} type="text" placeholder="Enter project name" />
         </Field>
         <Field>
             <FieldLabel>Project Description</FieldLabel>
-            <Textarea  placeholder="Enter project description" />
+            <Textarea value={projectData.description} onChange={(e) => setProjectData({...projectData, description: e.target.value})} placeholder="Enter project description" />
         </Field>
          <FieldGroup className="grid max-w-sm grid-cols-2">
             <Field>
                 <FieldLabel>Status</FieldLabel>
-                <Select>
+                <Select value={projectData.status} onValueChange={(value) => setProjectData({...projectData, status: value})}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select a status" />
       </SelectTrigger>
@@ -73,7 +84,7 @@ const [date, setDate] = useState<Date | undefined>(undefined)
         <SelectGroup>
           <SelectLabel>Status</SelectLabel>
         {Status.map((status) => (
-          <SelectItem value={status}>{status}</SelectItem>
+          <SelectItem value={status} key={status}>{status}</SelectItem>
         ))}
         </SelectGroup>
       </SelectContent>
@@ -84,14 +95,16 @@ const [date, setDate] = useState<Date | undefined>(undefined)
                 <Popover>
                     <PopoverTrigger>
                         <Button variant="outline">
-                            {date ? format(date, "PPP") : <span>Select a date</span>}{" "} <CalendarIcon />
+                            {projectData.dueDate ? format(projectData.dueDate, "PPP") : <span>Select a date</span>}{" "} <CalendarIcon />
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0">
                         <Calendar
                             mode="single"
-                            selected={date}
-                            onSelect={setDate}
+                            selected={projectData.dueDate}
+                            onSelect={(newDate) => {
+                                setProjectData((prev) => ({ ...prev, dueDate: newDate }));
+                            }}
                         />
                     </PopoverContent>
                 </Popover>  
@@ -99,7 +112,7 @@ const [date, setDate] = useState<Date | undefined>(undefined)
          </FieldGroup>
             <Field>
                 <FieldLabel>Members</FieldLabel>
-                <Select>
+                <Select value={projectData.members} onValueChange={(value)=>setProjectData({...projectData, members: [...projectData.members, value]})}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select a Project Members" />
       </SelectTrigger>
@@ -107,7 +120,7 @@ const [date, setDate] = useState<Date | undefined>(undefined)
         <SelectGroup>
           <SelectLabel>Status</SelectLabel>
         {Members.map((mem) => (
-          <SelectItem value={mem}>{mem}</SelectItem>
+          <SelectItem value={mem} key={mem}>{mem}</SelectItem>
         ))}
         </SelectGroup>
       </SelectContent>
@@ -119,6 +132,7 @@ const [date, setDate] = useState<Date | undefined>(undefined)
                 <Button type="submit" className="bg-blue-500 hover:bg-blue-600">Create Project</Button>
           </FieldGroup>
     </FieldGroup>
+    </form>
                </>
     );
 };
