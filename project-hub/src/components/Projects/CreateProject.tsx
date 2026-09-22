@@ -25,6 +25,8 @@ import {
 import { format } from 'date-fns/format';
 import { CalendarIcon } from "lucide-react"
 import { Textarea } from "@/components/ui/textarea"
+import type Project from '@/pages/Project';
+import {DialogClose} from "@/components/ui/dialog"
 
  const Status=[
         "Planning",
@@ -41,26 +43,34 @@ import { Textarea } from "@/components/ui/textarea"
       "Lannister"      
     ]
 
-const CreateProject = () => {
+const CreateProject = ({onProjectCreated}: {onProjectCreated: (project: Project) => void}) => {
   const [projectData, setProjectData] = useState<{
     name: string;
     description: string;
     status: string;
     dueDate?: Date;
-    members: string[];
+    members: string;
+    progress?: string;
   }>({
     name: '',
     description: '',
     status: 'Planning',
     dueDate: undefined,
-    members: []
+    members: '',
   });
 
   const handleSubmit = (event:any) => {
     event.preventDefault();
-    console.log('projectData', projectData);
+    const data: Project = {
+      id: crypto.randomUUID(),
+      name: projectData.name,
+      description: projectData.description,
+      status: projectData.status ?? 'Planning',
+      dueDate: projectData.dueDate?.toLocaleDateString(),
+      members: projectData.members ?? []
+    }
+    onProjectCreated(data);
   }
-
     return (
        <>
        <form onSubmit={handleSubmit}>
@@ -112,7 +122,7 @@ const CreateProject = () => {
          </FieldGroup>
             <Field>
                 <FieldLabel>Members</FieldLabel>
-                <Select value={projectData.members} onValueChange={(value)=>setProjectData({...projectData, members: [...projectData.members, value]})}>
+                <Select value={projectData.members} onValueChange={(value)=>setProjectData({...projectData, members: value})}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select a Project Members" />
       </SelectTrigger>
@@ -126,11 +136,19 @@ const CreateProject = () => {
       </SelectContent>
     </Select>
       </Field>
-        <FieldGroup className="grid max-w-sm grid-cols-2">
-        
-            <Button type="reset" variant="secondary">Cancel</Button>
-                <Button type="submit" className="bg-blue-500 hover:bg-blue-600">Create Project</Button>
-          </FieldGroup>
+      <FieldGroup className="grid grid-cols-2 gap-4">
+  <DialogClose asChild>
+    <Button type="button" variant="secondary" className="w-full">
+      Cancel
+    </Button>
+  </DialogClose>
+
+  <DialogClose asChild>
+    <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600">
+      Create Project
+    </Button>
+  </DialogClose>
+</FieldGroup>
     </FieldGroup>
     </form>
                </>
