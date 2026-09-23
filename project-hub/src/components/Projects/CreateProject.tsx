@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
  Field,
   FieldDescription,
@@ -43,7 +43,7 @@ import {DialogClose} from "@/components/ui/dialog"
       "Lannister"      
     ]
 
-const CreateProject = ({onProjectCreated}: {onProjectCreated: (project: Project) => void}) => {
+const CreateProject = ({onProjectCreated,editData,onProjectedit}: {onProjectCreated: (project: Project) => void, editData: Project | null,onProjectedit: (project: Project) => void}) => {
   const [projectData, setProjectData] = useState<{
     name: string;
     description: string;
@@ -58,20 +58,48 @@ const CreateProject = ({onProjectCreated}: {onProjectCreated: (project: Project)
     dueDate: undefined,
     members: '',
   });
-
   const handleSubmit = (event:any) => {
     event.preventDefault();
+    if(editData){
+      const updatedProject: Project = {
+        ...editData,
+        name: projectData.name,
+        description: projectData.description,
+        status: projectData.status, 
+        dueDate: projectData.dueDate,
+        members: projectData.members,
+      };
+      onProjectedit(updatedProject);
+    } 
+    else {
     const data: Project = {
       id: crypto.randomUUID(),
       name: projectData.name,
       description: projectData.description,
       status: projectData.status ?? 'Planning',
-      dueDate: projectData.dueDate?.toLocaleDateString(),
+      dueDate: projectData.dueDate,
       members: projectData.members ?? []
     }
     onProjectCreated(data);
   }
-    return (
+  }
+
+  useEffect(() => {
+    if (editData) {
+      setProjectData(editData as Project);
+    }
+    else {
+      setProjectData({
+        name: '',
+        description: '',
+        status: 'Planning',
+        dueDate: undefined,
+        members: '',
+      });
+    }
+  }, [editData]);
+
+  return (
        <>
        <form onSubmit={handleSubmit}>
      <FieldGroup>
@@ -138,14 +166,19 @@ const CreateProject = ({onProjectCreated}: {onProjectCreated: (project: Project)
       </Field>
       <FieldGroup className="grid grid-cols-2 gap-4">
   <DialogClose asChild>
-    <Button type="button" variant="secondary" className="w-full">
+    <Button type="button" variant="secondary" className="w-full" onClick={() => setProjectData({  
+  name: '',  description: '',
+  status: 'Planning',
+  dueDate: undefined,
+  members: '',
+})}>
       Cancel
     </Button>
   </DialogClose>
 
   <DialogClose asChild>
     <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600">
-      Create Project
+      {editData ? 'Update Project' : 'Create Project'}
     </Button>
   </DialogClose>
 </FieldGroup>

@@ -3,7 +3,13 @@ import { Table,TableBody,TableHeader,TableRow,TableHead } from "../ui/table";
 import CreateProject from "./CreateProject";
 
 
-const ProjectList = ({projects}: {projects: Project[]}) => {
+const ProjectList = ({projects,onProjectDeleted,onProjectEdited}: {projects: Project[], onProjectDeleted: (id: string) => void, onProjectEdited: (project: Project) => void}) => {
+
+  const handleDelete = (id: string) => {
+    onProjectDeleted(id);
+  }
+
+
   return (
     <>
       <Table className="table-fixed">
@@ -23,11 +29,11 @@ const ProjectList = ({projects}: {projects: Project[]}) => {
         <TableHead>{project.name}</TableHead>
         <TableHead>{project.status}</TableHead>
         <TableHead>{project.progress}</TableHead>
-          <TableHead>{project.dueDate}</TableHead>
+          <TableHead>{project.dueDate.toLocaleDateString()}</TableHead>
           <TableHead>{project.members}</TableHead>
         <TableHead>
-          <button className="bg-blue-500 text-white px-2 py-1 rounded">Edit</button>
-          <button className="bg-red-500 text-white px-2 py-1 rounded ml-2">Delete</button>
+          <button className="bg-blue-500 text-white px-2 py-1 rounded" onClick={()=>onProjectEdited(project)} >Edit</button>
+          <button className="bg-red-500 text-white px-2 py-1 rounded ml-2" onClick={()=>handleDelete(project.id)}>Delete</button>
         </TableHead>
         </TableRow>
     ))}
