@@ -25,8 +25,8 @@ import {
 import { format } from 'date-fns/format';
 import { CalendarIcon } from "lucide-react"
 import { Textarea } from "@/components/ui/textarea"
-import type Project from '@/pages/Project';
 import {DialogClose} from "@/components/ui/dialog"
+import type { Project } from "@/types/project";
 
  const Status=[
         "Planning",
@@ -55,7 +55,7 @@ const CreateProject = ({onProjectCreated,editData,onProjectedit}: {onProjectCrea
     name: '',
     description: '',
     status: 'Planning',
-    dueDate: undefined,
+    dueDate: new Date(),
     members: '',
   });
   const handleSubmit = (event:any) => {
@@ -66,7 +66,7 @@ const CreateProject = ({onProjectCreated,editData,onProjectedit}: {onProjectCrea
         name: projectData.name,
         description: projectData.description,
         status: projectData.status, 
-        dueDate: projectData.dueDate,
+        dueDate: projectData.dueDate || new Date(),
         members: projectData.members,
       };
       onProjectedit(updatedProject);
@@ -77,7 +77,7 @@ const CreateProject = ({onProjectCreated,editData,onProjectedit}: {onProjectCrea
       name: projectData.name,
       description: projectData.description,
       status: projectData.status ?? 'Planning',
-      dueDate: projectData.dueDate,
+      dueDate: projectData.dueDate ?? new Date(),
       members: projectData.members ?? []
     }
     onProjectCreated(data);
@@ -86,7 +86,7 @@ const CreateProject = ({onProjectCreated,editData,onProjectedit}: {onProjectCrea
 
   useEffect(() => {
     if (editData) {
-      setProjectData(editData as Project);
+      setProjectData(editData);
     }
     else {
       setProjectData({
@@ -165,7 +165,7 @@ const CreateProject = ({onProjectCreated,editData,onProjectedit}: {onProjectCrea
     </Select>
       </Field>
       <FieldGroup className="grid grid-cols-2 gap-4">
-  <DialogClose asChild>
+  <DialogClose >
     <Button type="button" variant="secondary" className="w-full" onClick={() => setProjectData({  
   name: '',  description: '',
   status: 'Planning',
@@ -176,7 +176,7 @@ const CreateProject = ({onProjectCreated,editData,onProjectedit}: {onProjectCrea
     </Button>
   </DialogClose>
 
-  <DialogClose asChild>
+  <DialogClose >
     <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600">
       {editData ? 'Update Project' : 'Create Project'}
     </Button>

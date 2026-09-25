@@ -1,6 +1,7 @@
-import type Project from "@/pages/Project";
 import { Table,TableBody,TableHeader,TableRow,TableHead } from "../ui/table";
 import CreateProject from "./CreateProject";
+import type { Project } from "@/types/project";
+import {AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter,AlertDialogCancel,AlertDialogAction} from "../ui/alert-dialog"
 
 
 const ProjectList = ({projects,onProjectDeleted,onProjectEdited}: {projects: Project[], onProjectDeleted: (id: string) => void, onProjectEdited: (project: Project) => void}) => {
@@ -13,31 +14,62 @@ const ProjectList = ({projects,onProjectDeleted,onProjectEdited}: {projects: Pro
   return (
     <>
       <Table className="table-fixed">
-         <TableHeader>
-     <TableRow>
-      <TableHead className='font-bold'>Project</TableHead>
-      <TableHead className='font-bold'>Status</TableHead>
-      <TableHead className='font-bold'>Progress</TableHead>
-      <TableHead className='font-bold'>Due Date</TableHead>
-      <TableHead className='font-bold'>Members</TableHead>
-      <TableHead className='font-bold'>Actions</TableHead>
-    </TableRow>
-  </TableHeader>
-  <TableBody>
-    {projects.map((project) => (
-      <TableRow key={project.id}>
-        <TableHead>{project.name}</TableHead>
-        <TableHead>{project.status}</TableHead>
-        <TableHead>{project.progress}</TableHead>
-          <TableHead>{project.dueDate.toLocaleDateString()}</TableHead>
-          <TableHead>{project.members}</TableHead>
-        <TableHead>
-          <button className="bg-blue-500 text-white px-2 py-1 rounded" onClick={()=>onProjectEdited(project)} >Edit</button>
-          <button className="bg-red-500 text-white px-2 py-1 rounded ml-2" onClick={()=>handleDelete(project.id)}>Delete</button>
-        </TableHead>
-        </TableRow>
-    ))}
-      </TableBody>  
+        <TableHeader>
+          <TableRow>
+            <TableHead className="font-bold">Project</TableHead>
+            <TableHead className="font-bold">Status</TableHead>
+            <TableHead className="font-bold">Progress</TableHead>
+            <TableHead className="font-bold">Due Date</TableHead>
+            <TableHead className="font-bold">Members</TableHead>
+            <TableHead className="font-bold">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {projects.map((project) => (
+            <TableRow key={project.id}>
+              <TableHead>{project.name}</TableHead>
+              <TableHead>{project.status}</TableHead>
+              <TableHead>{project.progress}</TableHead>
+              <TableHead>{project.dueDate?.toLocaleString('en-US')}</TableHead>
+              <TableHead>{project.members}</TableHead>
+              <TableHead>
+                <button
+                  className="bg-blue-500 text-white px-2 py-1 rounded"
+                  onClick={() => onProjectEdited(project)}
+                >
+                  Edit
+                </button>
+                <AlertDialog>
+                  <AlertDialogTrigger>
+                    <button className="bg-red-500 text-white px-2 py-1 rounded ml-2">
+                      Delete
+                    </button>
+                  </AlertDialogTrigger>
+
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+
+                      <AlertDialogDescription>
+                        This will permanently delete this project.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                      <AlertDialogAction
+                        onClick={() => handleDelete(project.id)}
+                      >
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </TableHead>
+            </TableRow>
+          ))}
+        </TableBody>
       </Table>
     </>
   );
