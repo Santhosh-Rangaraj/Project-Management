@@ -35,7 +35,7 @@ import type { Project } from "@/types/project";
         "On Hold",
         "Archived",
     ]
-    const Members=[
+export const Members=[
       "Arjun",
       "Sam",
       "Santhosh",

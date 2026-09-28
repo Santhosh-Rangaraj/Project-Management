@@ -21,6 +21,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {Members} from "@/components/Projects/CreateProject";
+
+
 
 
 const Project = () => {
@@ -30,6 +33,10 @@ const Project = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<string | null>(null);
+  const [filterMember, setFilterMember] = useState<string | null>(null);
+
+  //member list
+  const members=Members
 
   const handleProjectDelete = (id: string) => {
     setProjects(projects.filter((project) => project.id !== id));
@@ -47,6 +54,12 @@ const Project = () => {
     .filter((project) => {
       if (!filterStatus || filterStatus === "all") return true;
       return project.status.toLowerCase().includes(filterStatus.toLowerCase());
+    })
+    .filter((project) => {
+      if (!filterMember || filterMember === "all") return true;
+      return project.members.some((member) =>
+        member.toLowerCase().includes(filterMember.toLowerCase())
+      );
     });
 
 
@@ -65,7 +78,7 @@ const Project = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <Select value={filterStatus || "all"} onValueChange={setFilterStatus}>
+          <Select value={filterStatus} onValueChange={setFilterStatus}>
             <SelectTrigger className="w-64 h-12 p-5 rounded-lg border-2">
               <SelectValue placeholder="Filter by status" />
             </SelectTrigger>
@@ -78,6 +91,21 @@ const Project = () => {
                 <SelectItem value="completed">Completed</SelectItem>
                 <SelectItem value="on-hold">On Hold</SelectItem>
                 <SelectItem value="archived">Archived</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <Select value={filterMember} onValueChange={setFilterMember}>
+            <SelectTrigger className="w-64 h-12 p-5 rounded-lg border-2">
+              <SelectValue placeholder="Filter by Member" />
+            </SelectTrigger>
+                        <SelectContent >
+              <SelectGroup>
+                <SelectItem value="all">All</SelectItem>
+                {members.map((member) => (
+                  <SelectItem value={member} key={member}>
+                    {member}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>
