@@ -11,6 +11,7 @@ import Team from "./pages/Team";
 import Activity from "./pages/Activity";
 import Notification from "./pages/Notification";
 import NotFoundPage from "./pages/NotFound";
+import ViewProject from "./components/Projects/ViewProject";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             path="/notification"
             element={<Notification></Notification>}
           ></Route>
+          <Route path="/projects/view/" element={<ViewProject />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

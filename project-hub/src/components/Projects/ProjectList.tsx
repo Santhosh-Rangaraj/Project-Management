@@ -33,6 +33,9 @@ const ProjectList = ({projects,onProjectDeleted,onProjectEdited}: {projects: Pro
               <TableHead>{project.dueDate?.toLocaleString('en-US')}</TableHead>
               <TableHead>{project.members}</TableHead>
               <TableHead>
+                <button className="bg-green-500 text-white px-2 py-1 rounded mr-2">
+                  View
+                </button>
                 <button
                   className="bg-blue-500 text-white px-2 py-1 rounded"
                   onClick={() => onProjectEdited(project)}
