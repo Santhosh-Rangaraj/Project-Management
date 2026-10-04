@@ -4,6 +4,6 @@ export interface Project {
   description: string;
   status: string;
   dueDate?: string | Date;
-  members?: string;
+  members: string[];
   progress?: string;
 }

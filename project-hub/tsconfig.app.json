@@ -6,6 +6,7 @@
     "module": "esnext",
     "types": ["vite/client"],
     "allowArbitraryExtensions": true,
+    "allowJs": true,
     "skipLibCheck": true,
 
     "baseUrl": ".",
@@ -15,6 +16,7 @@
 
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
+    "ignoreDeprecations": "6.0",
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true,

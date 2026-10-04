@@ -1,15 +1,36 @@
-import { Table,TableBody,TableHeader,TableRow,TableHead } from "../ui/table";
-import CreateProject from "./CreateProject";
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableRow,
+  TableHead,
+} from "../ui/table";
 import type { Project } from "@/types/project";
-import {AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter,AlertDialogCancel,AlertDialogAction} from "../ui/alert-dialog"
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "../ui/alert-dialog";
+import { Link } from "react-router-dom";
 
-
-const ProjectList = ({projects,onProjectDeleted,onProjectEdited}: {projects: Project[], onProjectDeleted: (id: string) => void, onProjectEdited: (project: Project) => void}) => {
-
+const ProjectList = ({
+  projects,
+  onProjectDeleted,
+  onProjectEdited,
+}: {
+  projects: Project[];
+  onProjectDeleted: (id: string) => void;
+  onProjectEdited: (project: Project) => void;
+}) => {
   const handleDelete = (id: string) => {
     onProjectDeleted(id);
-  }
-
+  };
 
   return (
     <>
@@ -30,12 +51,17 @@ const ProjectList = ({projects,onProjectDeleted,onProjectEdited}: {projects: Pro
               <TableHead>{project.name}</TableHead>
               <TableHead>{project.status}</TableHead>
               <TableHead>{project.progress}</TableHead>
-              <TableHead>{project.dueDate?.toLocaleString('en-US')}</TableHead>
-              <TableHead>{project.members}</TableHead>
+              <TableHead>{project.dueDate?.toLocaleString("en-US")}</TableHead>
               <TableHead>
-                <button className="bg-green-500 text-white px-2 py-1 rounded mr-2">
+                {project.members?.join(", ") ?? "No members"}
+              </TableHead>
+              <TableHead>
+                <Link
+                  to={`/projects/view/${project.id}`}
+                  className="bg-green-500 text-white px-2 py-1 rounded mr-2"
+                >
                   View
-                </button>
+                </Link>
                 <button
                   className="bg-blue-500 text-white px-2 py-1 rounded"
                   onClick={() => onProjectEdited(project)}

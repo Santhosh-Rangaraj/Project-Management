@@ -1,16 +1,9 @@
 import { Plus } from "lucide-react";
 import CreateProject from "../components/Projects/CreateProject";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogClose,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import ProjectList from "@/components/Projects/ProjectList";
-import { useState } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import type { Project } from "@/types/project";
 import {
   Select,
@@ -20,15 +13,20 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import {Members} from "@/components/Projects/CreateProject";
+} from "@/components/ui/select";
+import { Members } from "@/components/Projects/CreateProject";
+import { useContext } from "react";
+import { ProjectContext } from "@/context/ProjectContext";
 
+type ProjectContextType = {
+  projects: Project[];
+  setProjects: Dispatch<SetStateAction<Project[]>>;
+};
 
-
-
-const Project = () => {
-  const [projects, setProjects] = useState<Project[]>([]);
-  console.log('projects: ', projects);
+const ProjectsPage = () => {
+  const { projects, setProjects } = useContext(
+    ProjectContext,
+  ) as ProjectContextType;
   const [editData, setEditData] = useState<Project | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -36,7 +34,7 @@ const Project = () => {
   const [filterMember, setFilterMember] = useState<string | null>(null);
 
   //member list
-  const members=Members
+  const members = Members;
 
   const handleProjectDelete = (id: string) => {
     setProjects(projects.filter((project) => project.id !== id));
@@ -45,11 +43,11 @@ const Project = () => {
   const handleEditData = (project: Project) => {
     setEditData(project);
     setDialogOpen(true);
-  }
+  };
 
   const DerivedProject = projects
     .filter((project) =>
-      project.name.toLowerCase().includes(searchTerm.toLowerCase())
+      project.name.toLowerCase().includes(searchTerm.toLowerCase()),
     )
     .filter((project) => {
       if (!filterStatus || filterStatus === "all") return true;
@@ -57,11 +55,10 @@ const Project = () => {
     })
     .filter((project) => {
       if (!filterMember || filterMember === "all") return true;
-      return project.members.some((member) =>
-        member.toLowerCase().includes(filterMember.toLowerCase())
+      return (project.members ?? []).some((member) =>
+        member.toLowerCase().includes(filterMember.toLowerCase()),
       );
     });
-
 
   return (
     <>
@@ -70,7 +67,7 @@ const Project = () => {
           <h1 className="text-4xl font-bold">Project</h1>
           <p className="text-gray-600">Manage and track all your projects</p>
         </div>
-        <div className='flex justify-end items-center gap-4'>
+        <div className="flex justify-end items-center gap-4">
           <input
             className="border-2 rounded p-2"
             type="text"
@@ -82,9 +79,9 @@ const Project = () => {
             <SelectTrigger className="w-64 h-12 p-5 rounded-lg border-2">
               <SelectValue placeholder="Filter by status" />
             </SelectTrigger>
-            <SelectContent >
+            <SelectContent>
               <SelectGroup>
-                <SelectLabel >Status</SelectLabel>
+                <SelectLabel>Status</SelectLabel>
                 <SelectItem value="all">All Statuses</SelectItem>
                 <SelectItem value="planning">Planning</SelectItem>
                 <SelectItem value="active">Active</SelectItem>
@@ -98,7 +95,7 @@ const Project = () => {
             <SelectTrigger className="w-64 h-12 p-5 rounded-lg border-2">
               <SelectValue placeholder="Filter by Member" />
             </SelectTrigger>
-                        <SelectContent >
+            <SelectContent>
               <SelectGroup>
                 <SelectItem value="all">All</SelectItem>
                 {members.map((member) => (
@@ -124,8 +121,8 @@ const Project = () => {
               onProjectedit={(updatedProject) => {
                 setProjects((prevProjects) =>
                   prevProjects.map((project) =>
-                    project.id === updatedProject.id ? updatedProject : project
-                  )
+                    project.id === updatedProject.id ? updatedProject : project,
+                  ),
                 );
                 setEditData(null);
               }}
@@ -143,4 +140,4 @@ const Project = () => {
   );
 };
 
-export default Project;
+export default ProjectsPage;

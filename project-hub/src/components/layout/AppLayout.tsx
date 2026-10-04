@@ -1,10 +1,7 @@
-import React from "react";
 import Sidebar from "./sidebar";
 import TopNavbar from "./TopNavbar";
 import "../../styles/AppLayout.css";
-import { Routes, Route,Outlet } from "react-router-dom";
-import Dashboard from "../../pages/Dashboard";
-import Project from "../../pages/Project";
+import { Outlet } from "react-router-dom";
 
 const AppLayout = () => {
   return (
