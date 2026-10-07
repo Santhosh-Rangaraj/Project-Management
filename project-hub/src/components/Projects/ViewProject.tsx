@@ -4,18 +4,53 @@ import {
   ProgressLabel,
   ProgressValue,
 } from "@/components/ui/progress";
-import { useParams } from "react-router-dom";
-import { useContext } from "react";
-import { ProjectContext } from "@/context/ProjectContext";
-
+import { useNavigate, useParams } from "react-router-dom";
+import { useContext, useState } from "react";
+import { ProjectContext, type Project } from "@/context/ProjectContext";
+import CreateProject from "./CreateProject";
+import { Dialog, DialogContent,} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "../ui/alert-dialog";
 const ViewProject = () => {
   const { id } = useParams<{ id: string }>();
-  const { projects } = useContext(ProjectContext);
+  const navigate = useNavigate();
+  const { projects,setProjects } = useContext(ProjectContext);
+  const [DialogOpen, setDialogOpen] = useState(false);
 
-  const viewProject = projects.find((project) => project.id === id);
+
+  const viewProject: Project | undefined = projects.find((project) => project.id === id);
+  console.log('viewProject: ', viewProject);
   const projectDueDate = viewProject?.dueDate
     ? new Date(viewProject.dueDate).toLocaleDateString()
     : "Not set";
+
+    const handleProjectEdit = (updatedProject: Project) => {
+      setProjects((prevProjects) =>
+        prevProjects.map((project) => 
+          project.id === updatedProject.id ? updatedProject : project
+        ) 
+      );
+      setDialogOpen(false);
+    }
+
+  const handleDelete = () => {
+    if (!viewProject) return;
+
+    setProjects((prevProjects) =>
+      prevProjects.filter((project) => project.id !== viewProject.id),
+    );
+    navigate("/projects", { replace: true });
+  };
+
 
   return (
     <>
@@ -26,12 +61,28 @@ const ViewProject = () => {
             <h5>{viewProject?.description ?? "No description available"}</h5>
           </div>
           <div>
-            <button className="rounded text-black p-2 m-2 bg-gray-200 w-28">
+            <button className="rounded text-black p-2 m-2 bg-gray-200 w-28" onClick={() => setDialogOpen(true)}>
               Edit Project
             </button>
-            <button className="rounded text-white p-2 m-2 bg-red-500 w-34">
-              Delete Project
-            </button>
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <button className="rounded text-white p-2 m-2 bg-red-500 w-34">
+                  Delete Project
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete the project.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
         <div className="p-4 w-full border border-gray-200 rounded">
@@ -85,6 +136,11 @@ const ViewProject = () => {
           <TabsContent value="activity">Change your password here.</TabsContent>
         </Tabs>
       </div>
+      <Dialog open={DialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="sm:max-w-[450px]">
+          <CreateProject editData={viewProject ?? null} onProjectedit={handleProjectEdit} />
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

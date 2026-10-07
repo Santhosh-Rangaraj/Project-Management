@@ -40,7 +40,7 @@ const CreateProject = ({
   editData,
   onProjectedit,
 }: {
-  onProjectCreated: (project: Project) => void;
+  onProjectCreated?: (project: Project) => void | undefined;
   editData: Project | null;
   onProjectedit: (project: Project) => void;
 }) => {
@@ -80,7 +80,7 @@ const CreateProject = ({
       members: projectData.members,
       progress: "0%",
     };
-    onProjectCreated(data);
+    onProjectCreated?.(data);
   };
 
   useEffect(() => {
