@@ -27,12 +27,12 @@ const ReusableTable = ({
   tableHeaders,
 }: {
   data: Array<Record<string, unknown>>;
-  onDeleted: (id: string) => void;
-  onEdited: (item: Record<string, unknown>) => void;
+  onDeleted?: (id: string) => void;
+  onEdited?: (item: Record<string, unknown>) => void;
   tableHeaders: { key: string; label: string }[];
 }) => {
   const handleDelete = (id: string) => {
-    onDeleted(id);
+    onDeleted?.(id);
   };
 
   return (
@@ -49,7 +49,7 @@ const ReusableTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((item) => (
+          {data.length>0 ? data.map((item) => (
             <TableRow key={item.id}>
                {tableHeaders.map((header) => (
                 <TableCell key={header.key}>
@@ -65,7 +65,7 @@ const ReusableTable = ({
                 </Link>
                 <button
                   className="bg-blue-500 text-white px-2 py-1 rounded"
-                  onClick={() => onEdited(item)}
+                  onClick={() => onEdited?.(item)}
                 >
                   Edit
                 </button>
@@ -98,7 +98,13 @@ const ReusableTable = ({
                 </AlertDialog>
               </TableCell>
             </TableRow>
-          ))}
+          )): (
+            <TableRow>
+              <TableCell colSpan={tableHeaders.length + 1} className="text-center">
+                No data available
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </>

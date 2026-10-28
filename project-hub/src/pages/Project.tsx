@@ -129,6 +129,7 @@ const ProjectsPage = () => {
               editData={editData}
             />
           </DialogContent>
+          
         </Dialog>
       </div>
       <ProjectList

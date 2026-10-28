@@ -7,6 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import TaskList from "@/components/Task/TaskList";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import CreateTask from "@/components/Task/CreateTask";
 
 const Tasks=()=>{
     return(
@@ -16,9 +19,18 @@ const Tasks=()=>{
             <h1>Task</h1>
             <p className="mt-1 text-gray-600">Manage and track all your tasks</p>
             </div>
-            <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
-                Create Task
-            </button>
+            <div>
+                <Dialog >
+                    <DialogTrigger >
+                        <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
+                            Create Task
+                        </button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <CreateTask />
+                    </DialogContent>
+                </Dialog>
+            </div>
         </div>
         <div className="flex justify-between items-center mt-4 ">
             <input type="text" placeholder="Search tasks..." className="border-2 rounded p-2" />
@@ -64,6 +76,9 @@ const Tasks=()=>{
                     </SelectGroup>
                 </SelectContent>
             </Select>
+        </div>
+        <div className="mt-6">
+        <TaskList />
         </div>
         </div>
     )
