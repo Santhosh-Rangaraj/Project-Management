@@ -13,10 +13,10 @@ const tableHeaders = [
 ];
 
 
-const TaskList = () => {
+const TaskList = ({taskData}: { taskData: any[] }) => {
     return (
         <div>
-            <ResponsiveTable tableHeaders={tableHeaders} data={[]} />
+            <ResponsiveTable tableHeaders={tableHeaders} data={taskData.length>0 ? taskData : []} />
         </div>
     );
 }

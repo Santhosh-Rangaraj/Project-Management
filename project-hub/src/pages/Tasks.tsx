@@ -10,8 +10,15 @@ import {
 import TaskList from "@/components/Task/TaskList";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import CreateTask from "@/components/Task/CreateTask";
+import { useState,useEffect } from "react";
 
 const Tasks=()=>{
+    const [taskData, setTaskData] = useState([]);
+
+    const handleCreateTask = (newTask:any) => {
+        setTaskData((prevTasks ) => [...prevTasks, newTask]);
+    }
+
     return(
     <div className="p-4">
     <div className="flex justify-between items-center">
@@ -27,7 +34,7 @@ const Tasks=()=>{
                         </button>
                     </DialogTrigger>
                     <DialogContent>
-                        <CreateTask />
+                        <CreateTask onCreate={handleCreateTask} />
                     </DialogContent>
                 </Dialog>
             </div>
@@ -78,7 +85,7 @@ const Tasks=()=>{
             </Select>
         </div>
         <div className="mt-6">
-        <TaskList />
+        <TaskList taskData={taskData} />
         </div>
         </div>
     )

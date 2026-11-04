@@ -20,24 +20,52 @@ import {
 import { CalendarIcon } from "lucide-react";
 import { Dialog } from "@base-ui/react";
 import { DialogClose } from "../ui/dialog";
+import { useState } from "react";
 
 
-const CreateTask = () => {
+const CreateTask = ({onCreate}:{onCreate: (task: any) => void}) => {
+
+    const [taskData, setTaskData] =useState({
+        title: "",
+        description: "",
+        project: "" as string | undefined,
+        status: "",
+        priority: "" as string | undefined,
+        assignedTo: "",
+        dueDate: undefined as Date | undefined,
+    });    
+
+   const handleSubmit = (e) => {
+        e.preventDefault();
+        const newTask = {
+              id:crypto.randomUUID(),
+              title: taskData.title,
+              description: taskData.description,
+              project: taskData.project,
+                status: taskData.status,
+                priority: taskData.priority,
+                assignedTo: taskData.assignedTo,
+                dueDate: taskData.dueDate,
+        }
+        console.log("newTask",newTask);
+        onCreate(newTask);
+    }
+
     return (
-        <form>
+        <form onSubmit={handleSubmit} className="space-y-4">
             <FieldGroup>
                 <Field>
                     <FieldLabel>Task Title</FieldLabel>
-                    <Input type="text" placeholder="Enter task name" />
+                    <Input value={taskData.title} onChange={(e)=> setTaskData({...taskData, title: e.target.value})} type="text" placeholder="Enter task name" />
                 </Field>  
                 <Field>
                     <FieldLabel>Task Description</FieldLabel>
-                    <Input type="text" placeholder="Enter task description" />
+                    <Input value={taskData.description} onChange={(e)=> setTaskData({...taskData, description: e.target.value})} type="text" placeholder="Enter task description" />
                 </Field>
                 <FieldGroup className="grid max-w-sm grid-cols-2">
                     <Field>
                     <FieldLabel>Project</FieldLabel>
-                    <Select>
+                    <Select value={taskData.project} onValueChange={(value)=> setTaskData({...taskData, project: value})}>
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select project" />
                         </SelectTrigger>
@@ -52,7 +80,7 @@ const CreateTask = () => {
                     </Field>
                     <Field>
                     <FieldLabel>Task Status</FieldLabel>
-                    <Select>
+                    <Select value={taskData.status} onValueChange={(value)=> setTaskData({...taskData, status: value})}>
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select task status" />
                         </SelectTrigger>
@@ -71,7 +99,7 @@ const CreateTask = () => {
                 <FieldGroup className="grid max-w-sm grid-cols-2">
                     <Field>
                     <FieldLabel>Task Priority</FieldLabel>
-                    <Select>
+                    <Select value={taskData.priority} onValueChange={(value)=> setTaskData({...taskData, priority: value})}>
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select task priority" />
                         </SelectTrigger>
@@ -87,7 +115,7 @@ const CreateTask = () => {
                     </Field>
                     <Field>
                         <FieldLabel>Assigned To</FieldLabel>
-                        <Select>
+                        <Select value={taskData.assignedTo} onValueChange={(value)=> setTaskData({...taskData, assignedTo: value})}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Select member" />
                             </SelectTrigger>
@@ -105,31 +133,44 @@ const CreateTask = () => {
                     <FieldLabel>Due Date</FieldLabel>
                     <Popover>
                         <PopoverTrigger >
-                            <Button variant="outline" className="w-full justify-start text-left font-normal">  
-                                <span className="text-muted-foreground">Pick a date</span> 
+                            <Button variant="outline" className="w-full justify-start text-left font-normal"> 
+                                {taskData.dueDate ? taskData.dueDate.toDateString() : "Pick a date"} 
+                               
                                 <CalendarIcon />
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0">
                             <Calendar mode="single" 
-                            selected={new Date()}
-                            onSelect={(date) => console.log(date)} 
+                            onSelect={(date) => {
+                                setTaskData({ ...taskData, dueDate: date });
+                            }} 
                             />
                         </PopoverContent>
                     </Popover>
                 </Field>
             </FieldGroup>
             <FieldGroup className="grid max-w-sm grid-cols-2">
-                <DialogClose >
-                    <Button type="button" variant="secondary" className="w-full">
-                        Cancel
-                    </Button>
+                <DialogClose
+                    render={
+                        <Button
+                            type="button"
+                            variant="secondary"
+                            className="mt-4 w-full"
+                        />
+                    }
+                >
+                    Cancel
                 </DialogClose>
 
-            <DialogClose >
-                <Button type="button" className="mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
-                    Create Task
-                </Button>
+            <DialogClose
+                render={
+                    <Button
+                        type="submit"
+                        className="mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+                    />
+                }
+            >
+                Create Task
             </DialogClose>
             </FieldGroup>
         </form>
