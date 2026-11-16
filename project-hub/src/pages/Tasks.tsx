@@ -14,10 +14,17 @@ import { useState,useEffect } from "react";
 
 const Tasks=()=>{
     const [taskData, setTaskData] = useState([]);
+    const [editData, setEditData] = useState<any | null>(null);
 
     const handleCreateTask = (newTask:any) => {
         setTaskData((prevTasks ) => [...prevTasks, newTask]);
     }
+
+    const handleEditTask = (updatedTask:any) => {
+        setEditData((updatedTask) 
+        );
+      }
+
 
     return(
     <div className="p-4">
@@ -34,7 +41,7 @@ const Tasks=()=>{
                         </button>
                     </DialogTrigger>
                     <DialogContent>
-                        <CreateTask onCreate={handleCreateTask} />
+                        <CreateTask onEdit={editData} onCreate={handleCreateTask} />
                     </DialogContent>
                 </Dialog>
             </div>
@@ -85,7 +92,7 @@ const Tasks=()=>{
             </Select>
         </div>
         <div className="mt-6">
-        <TaskList taskData={taskData} />
+        <TaskList taskData={taskData} onEdited={handleEditTask} />
         </div>
         </div>
     )

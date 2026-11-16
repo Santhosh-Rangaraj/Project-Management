@@ -18,12 +18,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
-import { Dialog } from "@base-ui/react";
 import { DialogClose } from "../ui/dialog";
 import { useState } from "react";
 
 
-const CreateTask = ({onCreate}:{onCreate: (task: any) => void}) => {
+const CreateTask = ({onCreate, onEdit, }:{onCreate: (task: any) => void, onEdit: (task: any) => void}) => {
 
     const [taskData, setTaskData] =useState({
         title: "",
@@ -45,10 +44,10 @@ const CreateTask = ({onCreate}:{onCreate: (task: any) => void}) => {
                 status: taskData.status,
                 priority: taskData.priority,
                 assignedTo: taskData.assignedTo,
-                dueDate: taskData.dueDate,
+                dueDate: taskData.dueDate?.toLocaleDateString('en-IN') || "",
         }
-        console.log("newTask",newTask);
         onCreate(newTask);
+
     }
 
     return (
@@ -134,7 +133,7 @@ const CreateTask = ({onCreate}:{onCreate: (task: any) => void}) => {
                     <Popover>
                         <PopoverTrigger >
                             <Button variant="outline" className="w-full justify-start text-left font-normal"> 
-                                {taskData.dueDate ? taskData.dueDate.toDateString() : "Pick a date"} 
+                                {taskData.dueDate ? taskData.dueDate.toLocaleDateString() : "Pick a date"} 
                                
                                 <CalendarIcon />
                             </Button>

@@ -13,10 +13,11 @@ const tableHeaders = [
 ];
 
 
-const TaskList = ({taskData}: { taskData: any[] }) => {
+const TaskList = ({taskData,onEdited} : { taskData: any[];onEdited: (task: any) => void }) => {
+   
     return (
         <div>
-            <ResponsiveTable tableHeaders={tableHeaders} data={taskData.length>0 ? taskData : []} />
+            <ResponsiveTable tableHeaders={tableHeaders} data={taskData.length>0 ? taskData : []} onEdited={onEdited} />
         </div>
     );
 }
