@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -22,9 +22,11 @@ import { DialogClose } from "../ui/dialog";
 import { useState } from "react";
 
 
-const CreateTask = ({onCreate, onEdit, }:{onCreate: (task: any) => void, onEdit: (task: any) => void}) => {
+const CreateTask = ({onCreate, onUpdate, editData }:{onCreate: (task: any) => void,onUpdate:(task:any)=>void,editData:any}) => {
+    console.log('editData: ', editData);
 
     const [taskData, setTaskData] =useState({
+        id: "",
         title: "",
         description: "",
         project: "" as string | undefined,
@@ -32,10 +34,42 @@ const CreateTask = ({onCreate, onEdit, }:{onCreate: (task: any) => void, onEdit:
         priority: "" as string | undefined,
         assignedTo: "",
         dueDate: undefined as Date | undefined,
-    });    
+    }); 
+    console.log('taskData: ', taskData);   
+
+    useEffect(() => {
+        if (editData) {
+            setTaskData({
+                id: editData.id,
+                title: editData.title,
+                description: editData.description,
+                project: editData.project,
+                status: editData.status,
+                priority: editData.priority,
+                assignedTo: editData.assignedTo,
+                dueDate: editData.dueDate ? new Date(editData.dueDate) : undefined,
+            });
+        }
+    }, [editData]);
+
 
    const handleSubmit = (e) => {
         e.preventDefault();
+    if (editData) {
+    const editedTask = {
+        title: taskData.title,
+        description: taskData.description,
+        project: taskData.project,
+        status: taskData.status,
+        priority: taskData.priority,
+        assignedTo: taskData.assignedTo,
+        dueDate: taskData.dueDate.toLocaleDateString('en-IN') || "",
+        id: editData.id,
+    };
+    onUpdate(editedTask);
+}
+
+        else {
         const newTask = {
               id:crypto.randomUUID(),
               title: taskData.title,
@@ -47,6 +81,7 @@ const CreateTask = ({onCreate, onEdit, }:{onCreate: (task: any) => void, onEdit:
                 dueDate: taskData.dueDate?.toLocaleDateString('en-IN') || "",
         }
         onCreate(newTask);
+    }
 
     }
 
@@ -132,14 +167,14 @@ const CreateTask = ({onCreate, onEdit, }:{onCreate: (task: any) => void, onEdit:
                     <FieldLabel>Due Date</FieldLabel>
                     <Popover>
                         <PopoverTrigger >
-                            <Button variant="outline" className="w-full justify-start text-left font-normal"> 
+                            <Button type='button' variant="outline" className="w-full justify-start text-left font-normal"> 
                                 {taskData.dueDate ? taskData.dueDate.toLocaleDateString() : "Pick a date"} 
-                               
                                 <CalendarIcon />
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0">
                             <Calendar mode="single" 
+                            selected={taskData.dueDate}
                             onSelect={(date) => {
                                 setTaskData({ ...taskData, dueDate: date });
                             }} 
@@ -169,7 +204,7 @@ const CreateTask = ({onCreate, onEdit, }:{onCreate: (task: any) => void, onEdit:
                     />
                 }
             >
-                Create Task
+                {editData? "Update Task" : "Create Task"}
             </DialogClose>
             </FieldGroup>
         </form>

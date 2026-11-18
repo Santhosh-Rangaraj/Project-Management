@@ -15,14 +15,16 @@ import { useState,useEffect } from "react";
 const Tasks=()=>{
     const [taskData, setTaskData] = useState([]);
     const [editData, setEditData] = useState<any | null>(null);
+    const [dialogOpen, setDialogOpen] = useState(false);
 
     const handleCreateTask = (newTask:any) => {
+        console.log('newTask: ', newTask);
         setTaskData((prevTasks ) => [...prevTasks, newTask]);
     }
 
     const handleEditTask = (updatedTask:any) => {
-        setEditData((updatedTask) 
-        );
+        setEditData(updatedTask);
+        setDialogOpen(true);
       }
 
 
@@ -34,14 +36,14 @@ const Tasks=()=>{
             <p className="mt-1 text-gray-600">Manage and track all your tasks</p>
             </div>
             <div>
-                <Dialog >
+                <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                     <DialogTrigger >
                         <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
                             Create Task
                         </button>
                     </DialogTrigger>
                     <DialogContent>
-                        <CreateTask onEdit={editData} onCreate={handleCreateTask} />
+                        <CreateTask onUpdate={handleEditTask} onCreate={handleCreateTask} editData={editData} />
                     </DialogContent>
                 </Dialog>
             </div>
