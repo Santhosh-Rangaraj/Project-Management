@@ -18,13 +18,21 @@ const Tasks=()=>{
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const handleCreateTask = (newTask:any) => {
-        console.log('newTask: ', newTask);
         setTaskData((prevTasks ) => [...prevTasks, newTask]);
     }
 
     const handleEditTask = (updatedTask:any) => {
         setEditData(updatedTask);
         setDialogOpen(true);
+      }
+      const handleUpdate = (updatedTask:any) => {
+        setTaskData((prevTasks) =>
+          prevTasks.map((task:any) =>   
+            task.id === updatedTask.id ? updatedTask : task
+            )
+        );
+        setEditData(null);
+        setDialogOpen(false);
       }
 
 
@@ -38,12 +46,12 @@ const Tasks=()=>{
             <div>
                 <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                     <DialogTrigger >
-                        <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
+                        <button onClick={()=>setEditData(null)} className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
                             Create Task
                         </button>
                     </DialogTrigger>
                     <DialogContent>
-                        <CreateTask onUpdate={handleEditTask} onCreate={handleCreateTask} editData={editData} />
+                        <CreateTask onUpdate={handleUpdate} onCreate={handleCreateTask} editData={editData} />
                     </DialogContent>
                 </Dialog>
             </div>

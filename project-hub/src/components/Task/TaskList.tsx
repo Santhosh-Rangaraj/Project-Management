@@ -3,13 +3,11 @@ import ResponsiveTable from "../common/Reuseable_Table";
 
 
 const tableHeaders = [
-    { key: "id", label: "ID" },
-    { key: "name", label: "Name" },
+    { key: "title", label: "Name" },
     { key: "status", label: "Status" },
     { key: "priority", label: "Priority" },
     { key: "project", label: "Project" },
     { key: "dueDate", label: "Due Date" },
-    { key: "actions", label: "Actions" },
 ];
 
 

@@ -23,7 +23,6 @@ import { useState } from "react";
 
 
 const CreateTask = ({onCreate, onUpdate, editData }:{onCreate: (task: any) => void,onUpdate:(task:any)=>void,editData:any}) => {
-    console.log('editData: ', editData);
 
     const [taskData, setTaskData] =useState({
         id: "",
@@ -49,6 +48,17 @@ const CreateTask = ({onCreate, onUpdate, editData }:{onCreate: (task: any) => vo
                 assignedTo: editData.assignedTo,
                 dueDate: editData.dueDate ? new Date(editData.dueDate) : undefined,
             });
+        } else {
+            setTaskData({
+                id: "",
+                title: "",
+                description: "",
+                project: "",
+                status: "",
+                priority: "",
+                assignedTo: "",
+                dueDate: undefined,
+            });
         }
     }, [editData]);
 
@@ -68,8 +78,7 @@ const CreateTask = ({onCreate, onUpdate, editData }:{onCreate: (task: any) => vo
     };
     onUpdate(editedTask);
 }
-
-        else {
+ else if (!editData) {
         const newTask = {
               id:crypto.randomUUID(),
               title: taskData.title,
