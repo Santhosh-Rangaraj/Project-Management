@@ -16,9 +16,13 @@ const Tasks=()=>{
     const [taskData, setTaskData] = useState([]);
     const [editData, setEditData] = useState<any | null>(null);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filterStatus, setFilterStatus] = useState("all");
+    const [filterPriority, setFilterPriority] = useState("all");
+    const [filterProject, setFilterProject] = useState("all");
 
     const handleCreateTask = (newTask:any) => {
-        setTaskData((prevTasks ) => [...prevTasks, newTask]);
+        setTaskData((prevTasks) => [...prevTasks, newTask]);
     }
 
     const handleEditTask = (updatedTask:any) => {
@@ -26,7 +30,7 @@ const Tasks=()=>{
         setDialogOpen(true);
       }
       const handleUpdate = (updatedTask:any) => {
-        setTaskData((prevTasks) =>
+        setTaskData((prevTasks:any) =>
           prevTasks.map((task:any) =>   
             task.id === updatedTask.id ? updatedTask : task
             )
@@ -35,6 +39,14 @@ const Tasks=()=>{
         setDialogOpen(false);
       }
 
+      const  DerivedTaskData=taskData.filter((task:any) => {
+        const matchesSearchTerm = task.title.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesFilterStatus = filterStatus === "all" || task.status === filterStatus;
+        const matchesFilterPriority = filterPriority === "all" || task.priority === filterPriority;
+        const matchesFilterProject = filterProject === "all" || task.project === filterProject;
+        return matchesSearchTerm && matchesFilterStatus && matchesFilterPriority && matchesFilterProject;
+      }
+      )
 
     return(
     <div className="p-4">
@@ -57,8 +69,8 @@ const Tasks=()=>{
             </div>
         </div>
         <div className="flex justify-between items-center mt-4 ">
-            <input type="text" placeholder="Search tasks..." className="border-2 rounded p-2" />
-            <Select>
+            <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search tasks..." className="border-2 rounded p-2" />
+            <Select value={filterStatus} onValueChange={(value) => setFilterStatus(value)} className="ml-4">
                 <SelectTrigger className="w-64 h-12 p-5 rounded-lg border-2">
                     <SelectValue placeholder="Filter by status" />
                 </SelectTrigger>
@@ -73,7 +85,7 @@ const Tasks=()=>{
                     </SelectGroup>
                 </SelectContent>
             </Select>
-            <Select>
+            <Select value={filterPriority} onValueChange={(value) => setFilterPriority(value)} className="ml-4">
                 <SelectTrigger className="w-64 h-12 p-5 rounded-lg border-2">
                     <SelectValue placeholder="Filter by Priority" />
                 </SelectTrigger>
@@ -87,7 +99,7 @@ const Tasks=()=>{
                     </SelectGroup>
                 </SelectContent>
             </Select>
-            <Select>
+            <Select value={filterProject} onValueChange={(value) => setFilterProject(value)} className="ml-4">
                 <SelectTrigger className="w-64 h-12 p-5 rounded-lg border-2">
                     <SelectValue placeholder="Filter by Project" />
                 </SelectTrigger>
@@ -102,7 +114,7 @@ const Tasks=()=>{
             </Select>
         </div>
         <div className="mt-6">
-        <TaskList taskData={taskData} onEdited={handleEditTask} />
+        <TaskList taskData={DerivedTaskData} onEdited={handleEditTask} />
         </div>
         </div>
     )
