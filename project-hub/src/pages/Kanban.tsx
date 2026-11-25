@@ -1,13 +1,14 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import React, { useState } from "react";
+import KanbanCard from "@/components/Kanban/KanbanCard";
 
 const Kanban=()=>{
     return(
-        <>
+        <div className="p-4">
         <h1>Kanban</h1>
-        <h5>Visualize and manage your workflow</h5>
+        <p className="text-gray-500">Visualize and manage your workflow</p>
 
-        <div className="flex justify-between items-center mt-4 ">
+        {/* <div className="flex justify-between items-center mt-4 ">
             <input type="text"  placeholder="Search tasks..." className="border-2 rounded p-2" />
             <Select  className="ml-4">
                 <SelectTrigger className="w-64 h-12 p-5 rounded-lg border-2">
@@ -51,8 +52,13 @@ const Kanban=()=>{
                     </SelectGroup>
                 </SelectContent>
             </Select>
+        </div> */}
+        <div className="m-grey border-2">
+
+            <KanbanCard task={{ title: "Task 1", description: "Description for Task 1" }} />
+
         </div>
-        </>  
+        </div>  
     )
 }
 
